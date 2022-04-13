@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Put } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Bookmark } from './bookmark.model';
 import { Model } from 'mongoose';
@@ -20,6 +20,32 @@ export class BookmarkProvider {
     });
     const result = await newBookmark.save();
     console.log(result);
-    return result.id;
+    return result;
+  }
+
+  async get(id: string): Promise<Bookmark> {
+    return await this.bookmarkModel.findById(id);
+  }
+
+  async getAll() {
+    return await this.bookmarkModel.find();
+  }
+
+  async update(
+    id: string,
+    title: string,
+    description: string,
+    price: number,
+  ): Promise<Bookmark> {
+    const newBookmark = new this.bookmarkModel({
+      title,
+      description,
+      price,
+    });
+    return await newBookmark.save();
+  }
+
+  async delete(id: string): Promise<Bookmark> {
+    return await this.bookmarkModel.findByIdAndDelete(id);
   }
 }
