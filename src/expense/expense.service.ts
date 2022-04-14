@@ -30,4 +30,7 @@ export class ExpenseService {
   async getAll() {
     return await this.expenseModel.find();
   }
+  async deleteItem(id: string): Promise<Expense> {
+    return await this.expenseModel.findByIdAndDelete();
+  }
 }
