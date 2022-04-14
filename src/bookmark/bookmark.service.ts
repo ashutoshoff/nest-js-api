@@ -31,19 +31,19 @@ export class BookmarkProvider {
     return await this.bookmarkModel.find();
   }
 
-  async update(
-    id: string,
-    title: string,
-    description: string,
-    price: number,
-  ): Promise<Bookmark> {
-    const newBookmark = new this.bookmarkModel({
-      title,
-      description,
-      price,
-    });
-    return await newBookmark.save();
-  }
+  // async update(
+  //   id: string,
+  //   title: string,
+  //   description: string,
+  //   price: number,
+  // ): Promise<Bookmark> {
+  //   const newBookmark = new this.bookmarkModel({
+  //     title,
+  //     description,
+  //     price,
+  //   });
+  //   return await newBookmark.save();
+  // }
 
   async delete(id: string): Promise<Bookmark> {
     return await this.bookmarkModel.findByIdAndDelete(id);
