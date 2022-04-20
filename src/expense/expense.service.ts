@@ -22,7 +22,7 @@ export class ExpenseService {
     });
     const result = await newExpense.save();
     console.log(result);
-    console.log(result.qunatity);
+    // console.log(result.qunatity);
     return result;
   }
 
@@ -30,7 +30,8 @@ export class ExpenseService {
   async getAll() {
     return await this.expenseModel.find();
   }
+  //to delete expenses
   async deleteItem(id: string): Promise<Expense> {
-    return await this.expenseModel.findByIdAndDelete();
+    return await this.expenseModel.findByIdAndDelete(id);
   }
 }

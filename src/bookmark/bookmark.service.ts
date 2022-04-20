@@ -31,21 +31,21 @@ export class BookmarkProvider {
     return await this.bookmarkModel.find();
   }
 
-  // async update(
-  //   id: string,
-  //   title: string,
-  //   description: string,
-  //   price: number,
-  // ): Promise<Bookmark> {
-  //   const newBookmark = new this.bookmarkModel({
-  //     title,
-  //     description,
-  //     price,
-  //   });
-  //   return await newBookmark.save();
-  // }
+  async updateBookmark(
+    id: string,
+    title: string,
+    description: string,
+    price: number,
+  ): Promise<Bookmark> {
+    const book = await this.bookmarkModel.findByIdAndUpdate(id, {
+      title,
+      description,
+      price,
+    });
+    return book;
+  }
 
   async delete(id: string): Promise<Bookmark> {
-    return await this.bookmarkModel.findByIdAndDelete(id);
+    return this.bookmarkModel.findByIdAndDelete(id);
   }
 }

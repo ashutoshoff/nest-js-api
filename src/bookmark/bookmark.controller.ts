@@ -40,10 +40,26 @@ export class BookmarkController {
   async getAll() {
     return await this.bookmarkService.getAll();
   }
-  // @Put(':id')
-  // async update(@Param('id') id: string) {
-  //   return await this.bookmarkService.update();
-  // }
+  //updating
+  @Put(':id')
+  async update(
+    @Param('id') id: string,
+    @Body('title') bookTitle: string,
+    @Body('description') bookDescription: string,
+    @Body('price') bookPrice: number,
+  ) {
+    try {
+      const updatedBookmark = await this.bookmarkService.updateBookmark(
+        id,
+        bookTitle,
+        bookDescription,
+        bookPrice,
+      );
+      return updatedBookmark;
+    } catch (error) {
+      throw error;
+    }
+  }
 
   @Delete(':id')
   async delete(@Param('id') id: string) {
