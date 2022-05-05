@@ -1,8 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './user.model';
 import { Model } from 'mongoose';
 import e from 'express';
+import compare from 'bcrypt';
+import { genSalt, hash } from 'bcrypt';
 
 @Injectable()
 export class UserProvider {
@@ -26,10 +28,22 @@ export class UserProvider {
     return findEmail;
   }
 
-  async findUser(email: string, password: string) {
-    const findUser = await this.userModel.findOne({
-      email: email,
-    });
-    return findUser;
+  async validateUser(email: string, pass: string) {
+    const user = await this.userModel.findOne({ email: email });
+
+    if (user && pass === user.password) {
+      return user;
+    } else {
+      console.log('Invalid email or password');
+    }
+  }
+
+  async comparePassword(
+    providePassword: string,
+    storedPassword: string,
+  ): Promise<boolean> {
+    console.log(providePassword, storedPassword);
+    const paswordIsMatched = await compare(providePassword, storedPassword);
+    return paswordIsMatched;
   }
 }
