@@ -25,8 +25,9 @@ export class UserController {
       const foundUser = await this.userService.getUserByEmail(email);
       if (foundUser)
         return { error: true, msg: 'User already exist with this email' };
-
-      const user = await this.userService.addUser(username, email, password);
+      const hashedPass = await this.userService.hashedPassword(password);
+      const user = await this.userService.addUser(username, email, hashedPass);
+      return { error: false, msg: 'Account created successfully' };
     } catch (error) {
       throw error;
     }
@@ -34,22 +35,17 @@ export class UserController {
 
   @Post('/getUser')
   async login(
-    // @Request() req,
     @Body('email') email: string,
     @Body('password') password: string,
-    // @Body() credential: { email: string; password: string },
-    // @Res({ passthrough: false }) response: Response,
   ): Promise<object> {
     try {
-      const finduser = await this.UserModel.findOne({
-        email: email,
-      });
-      console.log(finduser);
+      // const hashedPass = await this.userService.hashedPassword(password);
+
+      const finduser = await this.userService.validateUser(email, password);
       if (finduser) {
-        //if user found check for password
-        const user = this.userService.validateUser(email, password);
-        return { error: false, msg: 'Logged in Success' };
-      } else return { error: true, msg: 'Invalid User' };
+        console.log(finduser.user);
+        return { error: false, msg: 'Logged in Success', finduser };
+      } else return { error: true, msg: 'Login fail' };
     } catch (error) {
       throw error;
     }

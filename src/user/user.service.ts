@@ -2,9 +2,8 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './user.model';
 import { Model } from 'mongoose';
-import e from 'express';
-import compare from 'bcrypt';
-import { genSalt, hash } from 'bcrypt';
+const jwt = require('jsonwebtoken');
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserProvider {
@@ -18,21 +17,32 @@ export class UserProvider {
       email,
       password,
     });
-
     const result = await newUser.save();
     console.log(result);
     return result;
   }
+
   async getUserByEmail(email: string) {
     const findEmail = await this.userModel.findOne({ email: email });
     return findEmail;
   }
-
-  async validateUser(email: string, pass: string) {
+  async hashedPassword(password: string): Promise<string> {
+    const saltRounds = 10;
+    const hash = await bcrypt.hash(password, saltRounds);
+    return hash;
+  }
+  async validateUser(email: string, pass: string): Promise<any> {
     const user = await this.userModel.findOne({ email: email });
-
-    if (user && pass === user.password) {
-      return user;
+    // console.log('Login Password: ', pass, 'Saved Password:', user.password);
+    if (user && (await this.comparePassword(pass, user.password))) {
+      const token = jwt.sign(
+        {
+          email: user.email,
+          name: user.username,
+        },
+        process.env.SECRET,
+      );
+      return { user: token };
     } else {
       console.log('Invalid email or password');
     }
@@ -42,8 +52,10 @@ export class UserProvider {
     providePassword: string,
     storedPassword: string,
   ): Promise<boolean> {
-    console.log(providePassword, storedPassword);
-    const paswordIsMatched = await compare(providePassword, storedPassword);
+    const paswordIsMatched = await bcrypt.compare(
+      providePassword,
+      storedPassword,
+    );
     return paswordIsMatched;
   }
 }
