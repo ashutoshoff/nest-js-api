@@ -10,7 +10,7 @@ import { ExpenseModule } from './expense/expense.module';
     AuthModule,
     UserModule,
     BookmarkModule,
-    MongooseModule.forRoot('mongodb://localhost:27017/My-app'),
+    MongooseModule.forRoot(process.env.DB),
     ExpenseModule,
   ],
 })
