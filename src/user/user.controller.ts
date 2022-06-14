@@ -40,7 +40,6 @@ export class UserController {
   ): Promise<object> {
     try {
       // const hashedPass = await this.userService.hashedPassword(password);
-
       const finduser = await this.userService.validateUser(email, password);
       if (finduser) {
         console.log(finduser.user);

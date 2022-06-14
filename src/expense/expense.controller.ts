@@ -26,7 +26,7 @@ export class ExpenseController {
   async getAll() {
     return await this.expenseService.getAll();
   }
-
+  //it delets
   @Delete(':id')
   async deleteItem(@Param('id') id: string) {
     return await this.expenseService.deleteItem(id);
