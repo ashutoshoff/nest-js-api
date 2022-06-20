@@ -7,6 +7,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
+import { url } from 'inspector';
 import { BookmarkProvider } from './bookmark.service';
 
 @Controller('bookmark')
@@ -40,6 +41,15 @@ export class BookmarkController {
   async getAll() {
     return await this.bookmarkService.getAll();
   }
+
+  @Get('/urltopdf')
+  async getUrl() {
+    const url =
+      'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf';
+    return url;
+  }
+
+  //const url = 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'
   //updating
   @Put(':id')
   async update(
