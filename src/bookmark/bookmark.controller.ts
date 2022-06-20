@@ -32,10 +32,10 @@ export class BookmarkController {
     }
   }
 
-  @Get(':id')
-  async get(@Param('id') id: string) {
-    return await this.bookmarkService.get(id);
-  }
+  // @Get(':id')
+  // async get(@Param('id') id: string) {
+  //   return await this.bookmarkService.get(id);
+  // }
 
   @Get()
   async getAll() {
